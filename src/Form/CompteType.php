@@ -13,8 +13,7 @@ class CompteType extends AbstractType
     {
         $builder
             ->add('numerocompte')
-            ->add('partenaire')
-            //->add('solde')
+
         ;
     }
 

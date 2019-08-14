@@ -5,12 +5,11 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\HttpFoundation\Request;
 
 class AppFixtures extends Fixture
 {
 
-public function __construct(UserPasswordEncoderInterface $passwordEncoder )
+public function __construct(UserPasswordEncoderInterface $passwordEncoder)
 {
 $this->passwordEncoder = $passwordEncoder;
 }
@@ -25,9 +24,9 @@ public function load(ObjectManager $manager)
     $user->setRoles(['ROLE_SuperUtilisateur']);
     $passwordEncoder= $this->passwordEncoder->encodePassword($user, 'marie199');
     $user->setPassword($passwordEncoder);
-    $user->setPhoto('image');
+    //$file=$request->files->all("null");
+    $user->setImageName("null");
     $manager->persist($user);
-
     $manager->flush();
 }
 

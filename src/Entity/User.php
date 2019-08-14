@@ -6,9 +6,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @Vich\Uploadable
  */
 class User implements UserInterface
 {
@@ -49,12 +52,21 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255)
      */
     private $statut;
+/**
+     * NOTE: This is not a mapped field of entity metadata, just a simple property.
+     * 
+     * @Vich\UploadableField(mapping="user_image", fileNameProperty="imageName")
+     * 
+     * @var File
+     */
+    private $imageFile;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     * @var string
      */
-    private $photo;
-
+    private $imageName;
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Partenaire", inversedBy="users")
      */
@@ -65,9 +77,15 @@ class User implements UserInterface
      */
     private $depot;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Transaction", mappedBy="user")
+     */
+    private $usertrans;
+
     public function __construct()
     {
         $this->depot = new ArrayCollection();
+        $this->usertrans = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -179,18 +197,40 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getPhoto(): ?string
+    
+    /**
+     * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
+     * of 'UploadedFile' is injected into this setter to trigger the update. If this
+     * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
+     * must be able to accept an instance of 'File' as the bundle will inject one here
+     * during Doctrine hydration.
+     *
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $imageFile
+     */
+    public function setImageFile(?File $imageFile = null): void
     {
-        return $this->photo;
+        $this->imageFile = $imageFile;
+
+        if ($this->imageFile instanceof UploadedFile) {
+            $this->updatedAt = new \DateTime('now');
+        }
     }
 
-    public function setPhoto(string $photo): self
+    public function getImageFile(): ?File
     {
-        $this->photo = $photo;
-
-        return $this;
+        return $this->imageFile;
     }
 
+    public function setImageName(?string $imageName): void
+    {
+        $this->imageName = $imageName;
+    }
+
+    public function getImageName(): ?string
+    {
+        return $this->imageName;
+    }
+    
     public function getPartenaire(): ?Partenaire
     {
         return $this->partenaire;
@@ -228,6 +268,37 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($depot->getUser() === $this) {
                 $depot->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Transaction[]
+     */
+    public function getUsertrans(): Collection
+    {
+        return $this->usertrans;
+    }
+
+    public function addUsertran(Transaction $usertran): self
+    {
+        if (!$this->usertrans->contains($usertran)) {
+            $this->usertrans[] = $usertran;
+            $usertran->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUsertran(Transaction $usertran): self
+    {
+        if ($this->usertrans->contains($usertran)) {
+            $this->usertrans->removeElement($usertran);
+            // set the owning side to null (unless already changed)
+            if ($usertran->getUser() === $this) {
+                $usertran->setUser(null);
             }
         }
 
