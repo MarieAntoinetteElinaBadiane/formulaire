@@ -44,9 +44,15 @@ class Compte
      */
     private $depotcompte;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="User")
+     */
+    private $users;
+
     public function __construct()
     {
         $this->depotcompte = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -115,6 +121,37 @@ class Compte
             // set the owning side to null (unless already changed)
             if ($depotcompte->getCompte() === $this) {
                 $depotcompte->setCompte(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->contains($user)) {
+            $this->users->removeElement($user);
+            // set the owning side to null (unless already changed)
+            if ($user->getUser() === $this) {
+                $user->setUser(null);
             }
         }
 

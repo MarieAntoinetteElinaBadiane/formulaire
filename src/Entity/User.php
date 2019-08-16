@@ -82,6 +82,11 @@ class User implements UserInterface
      */
     private $usertrans;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Compte", inversedBy="users")
+     */
+    private $compte;
+
     public function __construct()
     {
         $this->depot = new ArrayCollection();
@@ -301,6 +306,18 @@ class User implements UserInterface
                 $usertran->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCompte(): ?Compte
+    {
+        return $this->compte;
+    }
+
+    public function setCompte(?Compte $compte): self
+    {
+        $this->compte = $compte;
 
         return $this;
     }

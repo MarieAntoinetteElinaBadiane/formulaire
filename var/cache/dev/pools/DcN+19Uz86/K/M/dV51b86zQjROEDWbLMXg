@@ -24,7 +24,7 @@ return $getExpiry ? PHP_INT_MAX : Hydrator::hydrate(
         ],
         'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Security' => [
             'expression' => [
-                1 => 'has_role(\'ROLE_CAISSIER\') ',
+                1 => 'has_role(\'ROLE_CAISSIER_SYSTEME\') ',
             ],
         ],
     ],

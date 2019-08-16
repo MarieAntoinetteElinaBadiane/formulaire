@@ -12,6 +12,9 @@ return $getExpiry ? PHP_INT_MAX : Hydrator::hydrate(
             'type' => [
                 'date',
             ],
+            'nullable' => [
+                true,
+            ],
         ],
     ],
     [

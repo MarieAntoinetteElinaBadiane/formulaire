@@ -60,62 +60,7 @@ class ServiceController extends FOSRestController
     
     }
 
-/**
-* @Route("/usercompte", name="usercompte", methods={"POST"})
-*/
-public function usercompte (Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder): Response
-{
 
-    $part= new Partenaire();
-                $form = $this->createForm(PartenaireType::class, $part);
-                $data=$request->request->all();
-                $form->submit($data);
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($part);
-                $entityManager->flush();
-
-    $utilisateur = new User();
-    $form=$this->createForm(UserType::class , $utilisateur);
-    $form->handleRequest($request);
-    $data=$request->request->all();
-    $file= $request->files->all()['imageFile'];
-    $form->submit($data);
-
-    $utilisateur->setRoles(["ROLE_CAISSIER"]);
-    $utilisateur->setImageFile($file);
-    $utilisateur->setPassword($passwordEncoder->encodePassword($utilisateur,
-    $form->get('password')->getData()
-        )
-        );
-    $entityManager = $this->getDoctrine()->getManager();
-    $utilisateur->setPartenaire($part);
-    $entityManager->persist($utilisateur);
-    $entityManager->flush();
-
-
-        $compte = new Compte();
-        $jour = date('d');
-        $mois = date('m');
-        $annee = date('Y');
-        $heure = date('H');
-        $minute = date('i');
-        $seconde= date('s');
-        $tata= date('ma');
-        $numerocompte=$jour.$mois.$annee.$heure.$minute.$seconde.$tata;
-        $compte->setNumerocompte($numerocompte);
-        $compte->setSolde(0);
-        $form = $this->createForm(CompteType::class, $compte);
-        $data=$request->request->all();
-        $form->submit($data);
-
-
-$entityManager = $this->getDoctrine()->getManager();
-//$utilisateur->setCompteUser($compte);
-$compte->setPartenaire($part);
-$entityManager->persist($compte);
-$entityManager->flush();
-return new Response('Les tables ont été ajouté',Response::HTTP_CREATED); 
-}
 
 
 /**
@@ -131,7 +76,7 @@ public function systeme (Request $request, EntityManagerInterface $entityManager
     $file= $request->files->all()['imageFile'];
     $form->submit($data);
 
-    $utilisateur->setRoles(["ROLE_CAISSIER"]);
+    $utilisateur->setRoles(["ROLE_CAISSIER_SYSTEME"]);
     $utilisateur->setImageFile($file);
     $utilisateur->setPassword($passwordEncoder->encodePassword($utilisateur,
     $form->get('password')->getData()
@@ -166,67 +111,6 @@ return new Response('Le deux tables ont été ajouté',Response::HTTP_CREATED);
 
 
 /**
-* @Route("/ajoutdestrois", name="ajoutdestrois", methods={"POST"})
-*/
-public function ajout(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder): Response
-{
-    
-                $part= new Partenaire();
-                $form = $this->createForm(PartenaireType::class, $part);
-                $data=$request->request->all();
-                $form->submit($data);
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($part);
-                $entityManager->flush();
-
-    $utilisateur = new User();
-    $form=$this->createForm(UserType::class , $utilisateur);
-    $form->handleRequest($request);
-    $data=$request->request->all();
-    $file= $request->files->all()['imageFile'];
-    $form->submit($data);
-
-    $utilisateur->setRoles(["ROLE_USER"]);
-    $utilisateur->setImageFile($file);
-    $utilisateur->setPassword($passwordEncoder->encodePassword($utilisateur,
-    $form->get('password')->getData()
-        )
-        );
-    $entityManager = $this->getDoctrine()->getManager();
-    $utilisateur->setPartenaire($part);
-    $entityManager->persist($utilisateur);
-    $entityManager->flush();
-
-return new Response('On a bien ajouté un utilisateur',Response::HTTP_CREATED); 
-}
-
-/**
-* @Route("/caissier", name="caissier", methods={"POST"})
-*/
-public function caissier(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder)
-{
-
-    $utilisateur = new User();
-    $form=$this->createForm(UserType::class , $utilisateur);
-    $form->handleRequest($request);
-    $data=$request->request->all();
-    $file= $request->files->all()['imageFile'];
-          $form->submit($data);
-    
-     $utilisateur->setRoles(['ROLE_CAISSIER']);
-    $utilisateur->setImageFile($file);
-    $utilisateur->setPassword($passwordEncoder->encodePassword($utilisateur,
-    $form->get('password')->getData()
-        )
-        );
-    $entityManager = $this->getDoctrine()->getManager();
-    $entityManager->persist($utilisateur);
-    $entityManager->flush();
-    return new Response('La personne a été ajouté',Response::HTTP_CREATED); 
-
-    }
-
-/**
 * @Route("/admin", name="admin", methods={"POST"})
 */
 public function admin(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder)
@@ -251,38 +135,6 @@ public function admin(Request $request, EntityManagerInterface $entityManager, U
     return new Response('La personne a été ajouté',Response::HTTP_CREATED); 
 
     }
-
-/**
-* @Route("/user", name="user", methods={"POST"})
-*/
-public function adduser(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder): Response
-{
-    
-                $part= new Partenaire();
-                $form = $this->createForm(PartenaireType::class, $part);
-                $data=$request->request->all();
-                $form->submit($data);
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($part);
-                $entityManager->flush();
-
-    $utilisateur = new User();
-    $form=$this->createForm(UserType::class , $utilisateur);
-    $form->handleRequest($request);
-    $data=$request->request->all();
-    $form->submit($data);
-
-    $utilisateur->setRoles(["ROLE_USER"]);
-    $utilisateur->setPassword($passwordEncoder->encodePassword($utilisateur,
-    $form->get('password')->getData()
-        )
-        );
-    $entityManager = $this->getDoctrine()->getManager();
-    $utilisateur->setPartenaire($part);
-    $entityManager->persist($utilisateur);
-    $entityManager->flush();
-    return new Response('Le partenaire a bien ajouté un user',Response::HTTP_CREATED); 
-}
 
 
 /**
@@ -318,15 +170,13 @@ public function addadmin(Request $request, EntityManagerInterface $entityManager
 
 /**
 * @Route("/api/depot", name="depot", methods={"POST"})
-* @Security("has_role('ROLE_CAISSIER') ")
+* @Security("has_role('ROLE_CAISSIER_SYSTEME') ")
 */
 public function argent(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder)
 {
 
     $values = json_decode($request->getContent());
     if ($values->montant >= 75000){
-
-    
         
 
             $depot = new Depot();
@@ -345,6 +195,7 @@ public function argent(Request $request, EntityManagerInterface $entityManager, 
              findOneBy(["numerocompte"=>$values->numerocompte]);
 
         $compte->setSolde($compte->getSolde()+ $values->montant);
+        //$depot->setCompte($compte);
         $form = $this->createForm(CompteType::class, $compte);
         $data=$request->request->all();
         $form->submit($data);

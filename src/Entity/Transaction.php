@@ -39,39 +39,16 @@ class Transaction
     private $CNIenvoi;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $adresseenvoi;
-
-    /**
      * @ORM\Column(type="date")
      */
     private $dateenvoi;
 
-    /**
-     * @ORM\Column(type="date")
-     */
-    private $dateretrai;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
     private $nomretrai;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $adresseretrai;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $telephoneretrai;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $CNIretrai;
 
     /**
      * @ORM\Column(type="integer")
@@ -86,7 +63,7 @@ class Transaction
     /**
      * @ORM\Column(type="integer")
      */
-    private $tarif;
+    private $commissionEtat;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="usertrans")
@@ -97,6 +74,36 @@ class Transaction
      * @ORM\Column(type="string", length=255)
      */
     private $statut;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $commissionAdmin;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $commissionEnvoi;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $commissionRetrait;
+
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private $dateretrai;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $telephoneretrai;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $CNIretrai;
 
     public function getId(): ?int
     {
@@ -151,18 +158,6 @@ class Transaction
         return $this;
     }
 
-    public function getAdresseenvoi(): ?string
-    {
-        return $this->adresseenvoi;
-    }
-
-    public function setAdresseenvoi(string $adresseenvoi): self
-    {
-        $this->adresseenvoi = $adresseenvoi;
-
-        return $this;
-    }
-
     public function getDateenvoi(): ?\DateTimeInterface
     {
         return $this->dateenvoi;
@@ -175,18 +170,6 @@ class Transaction
         return $this;
     }
 
-    public function getDateretrai(): ?\DateTimeInterface
-    {
-        return $this->dateretrai;
-    }
-
-    public function setDateretrai(\DateTimeInterface $dateretrai): self
-    {
-        $this->dateretrai = $dateretrai;
-
-        return $this;
-    }
-
     public function getNomretrai(): ?string
     {
         return $this->nomretrai;
@@ -195,42 +178,6 @@ class Transaction
     public function setNomretrai(string $nomretrai): self
     {
         $this->nomretrai = $nomretrai;
-
-        return $this;
-    }
-
-    public function getAdresseretrai(): ?string
-    {
-        return $this->adresseretrai;
-    }
-
-    public function setAdresseretrai(string $adresseretrai): self
-    {
-        $this->adresseretrai = $adresseretrai;
-
-        return $this;
-    }
-
-    public function getTelephoneretrai(): ?int
-    {
-        return $this->telephoneretrai;
-    }
-
-    public function setTelephoneretrai(int $telephoneretrai): self
-    {
-        $this->telephoneretrai = $telephoneretrai;
-
-        return $this;
-    }
-
-    public function getCNIretrai(): ?int
-    {
-        return $this->CNIretrai;
-    }
-
-    public function setCNIretrai(int $CNIretrai): self
-    {
-        $this->CNIretrai = $CNIretrai;
 
         return $this;
     }
@@ -259,14 +206,14 @@ class Transaction
         return $this;
     }
 
-    public function getTarif(): ?int
+    public function getCommissionEtat(): ?int
     {
-        return $this->tarif;
+        return $this->commissionEtat;
     }
 
-    public function setTarif(int $tarif): self
+    public function setCommissionEtat(int $commissionEtat): self
     {
-        $this->tarif = $tarif;
+        $this->commissionEtat = $commissionEtat;
 
         return $this;
     }
@@ -291,6 +238,78 @@ class Transaction
     public function setStatut(string $statut): self
     {
         $this->statut = $statut;
+
+        return $this;
+    }
+
+    public function getCommissionAdmin(): ?int
+    {
+        return $this->commissionAdmin;
+    }
+
+    public function setCommissionAdmin(int $commissionAdmin): self
+    {
+        $this->commissionAdmin = $commissionAdmin;
+
+        return $this;
+    }
+
+    public function getCommissionEnvoi(): ?int
+    {
+        return $this->commissionEnvoi;
+    }
+
+    public function setCommissionEnvoi(int $commissionEnvoi): self
+    {
+        $this->commissionEnvoi = $commissionEnvoi;
+
+        return $this;
+    }
+
+    public function getCommissionRetrait(): ?int
+    {
+        return $this->commissionRetrait;
+    }
+
+    public function setCommissionRetrait(int $commissionRetrait): self
+    {
+        $this->commissionRetrait = $commissionRetrait;
+
+        return $this;
+    }
+
+    public function getDateretrai(): ?\DateTimeInterface
+    {
+        return $this->dateretrai;
+    }
+
+    public function setDateretrai(?\DateTimeInterface $dateretrai): self
+    {
+        $this->dateretrai = $dateretrai;
+
+        return $this;
+    }
+
+    public function getTelephoneretrai(): ?int
+    {
+        return $this->telephoneretrai;
+    }
+
+    public function setTelephoneretrai(?int $telephoneretrai): self
+    {
+        $this->telephoneretrai = $telephoneretrai;
+
+        return $this;
+    }
+
+    public function getCNIretrai(): ?int
+    {
+        return $this->CNIretrai;
+    }
+
+    public function setCNIretrai(?int $CNIretrai): self
+    {
+        $this->CNIretrai = $CNIretrai;
 
         return $this;
     }
