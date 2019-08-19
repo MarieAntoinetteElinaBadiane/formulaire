@@ -18,11 +18,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class TransactionController extends AbstractController
 {
 /**
- * @Route("/api/envoi", name="envoi", methods={"POST"})
+ * @Route("/api/envoi/{id}", name="envoi", methods={"POST"})
  * @Security("has_role('ROLE_USER')")
  */
 
- public function envoi (Request $request, EntityManagerInterface $entityManager)
+ public function envoi (Request $request, $id, EntityManagerInterface $entityManager)
  {
 
     $transaction = new Transaction();
@@ -51,39 +51,34 @@ class TransactionController extends AbstractController
              $values->getValeur();
              if($vo >= $values->getBorneInferieure() && $vo <= $values->getBorneSuperieure() ){
 
-                  $commission=$values->getValeur();
+                $commission=$values->getValeur();
+                $commi1= ($commission*10)/100;
+                $commi2= ($commission*20)/100;
+               $commi3=($commission*30)/100;
+                $commi4=($commission*40)/100; 
 
-       $transaction->setCommissionEnvoi(($commission*10)/100);
-       $transaction->setCommissionRetrait(($commission*20)/100);
-       $transaction->setCommissionEtat(($commission*30)/100);
-       $transaction->setCommissionAdmin(($commission*40)/100);
+     $transaction->setCommissionEnvoi($commi1);
+     $transaction->setCommissionRetrait($commi2);
+     $transaction->setCommissionEtat($commi3);
+     $transaction->setCommissionAdmin($commi4);
        break;
         }
 }
-       //$transaction->setUser($values);
-       $transaction->setCodeenvoi($codeenvoi);
-       $is=$this->getUser();
-       $transaction->setUser($is);
-       $entityManager->persist($transaction);
-       $entityManager->flush();
-       $compte= $this->getDoctrine()->getRepository(Compte::class)->findOneBy(['partenaire' => $is->getPartenaire()]);
-//var_dump($is);
+        
+        $transaction->setCodeenvoi($codeenvoi);
+        $is=$this->getUser();
+        $transaction->setUser($is);
+        $entityManager->persist($transaction);
+        $entityManager->flush();
+      $compte=$is->getCompte();
+      $compte = $this->getDoctrine()->getRepository(Compte::class)->find($id);
+
        
-        if($compte->getSolde() > $transaction->getMontantenvoi() ){
-       $mo= $compte->getSolde() - $transaction->getMontantenvoi() + $transaction->getCommissionEnvoi();
-       $compte->setSolde($mo);
+      if($compte->getSolde() > $transaction->getMontantenvoi() ){
+        $compte->setSolde($compte->getSolde() - $transaction->getMontantenvoi() + $commi1);
 
-       var_dump($mo); die();
-     
-//        $typ = new Type();
-//                 $form = $this->createForm(TypetransType::class, $typ);
-//                 $form->handleRequest($request);
-//                 $data = $request->request->all();
-//                 $form->submit($data);
-//                     $entityManager = $this->getDoctrine()->getManager();
-//                     $entityManager->persist($tran);
-//                     $entityManager->flush();
-
+    
+        $entityManager = $this->getDoctrine()->getManager();
        $entityManager->persist($compte);
        $entityManager->flush();
        return new Response('Le transfert a été effectué avec succés.Voici le code : '.$transaction->getCodeenvoi());
@@ -96,11 +91,11 @@ class TransactionController extends AbstractController
 
 
 /**
- * @Route("/api/retrait", name="retrait", methods={"POST"})
+ * @Route("/api/retrait/{id}", name="retrait", methods={"POST"})
  * @Security("has_role('ROLE_USER')")
  */
 
-public function retrait (Request $request, EntityManagerInterface $entityManager)
+public function retrait (Request $request, $id, EntityManagerInterface $entityManager)
 {
 
    $transaction = new Transaction();
@@ -130,11 +125,15 @@ public function retrait (Request $request, EntityManagerInterface $entityManager
             if($vo >= $values->getBorneInferieure() && $vo <= $values->getBorneSuperieure() ){
 
                  $commission=$values->getValeur();
+                 $commi1= ($commission*10)/100;
+                 $commi2= ($commission*20)/100;
+                $commi3=($commission*30)/100;
+                 $commi4=($commission*40)/100; 
 
-      $transaction->setCommissionEnvoi(($commission*10)/100);
-      $transaction->setCommissionRetrait(($commission*20)/100);
-      $transaction->setCommissionEtat(($commission*30)/100);
-      $transaction->setCommissionAdmin(($commission*40)/100);
+      $transaction->setCommissionEnvoi($commi1);
+      $transaction->setCommissionRetrait($commi2);
+      $transaction->setCommissionEtat($commi3);
+      $transaction->setCommissionAdmin($commi4); 
       break;
        }
 }
@@ -144,18 +143,16 @@ public function retrait (Request $request, EntityManagerInterface $entityManager
       $transaction->setUser($is);
       $entityManager->persist($transaction);
       $entityManager->flush();
-      $compte= $this->getDoctrine()->getRepository(Compte::class)->findOneBy(['partenaire' => $is->getPartenaire()]);
-//var_dump($is);
+    $compte=$is->getCompte();
+    $compte = $this->getDoctrine()->getRepository(Compte::class)->find($id);
       
-       if($compte->getSolde() < $transaction->getMontantenvoi() ){
-      $mo= $compte->getSolde() + $transaction->getMontantenvoi() + $transaction->getCommissionRetrait();
-      $compte->setSolde($mo);
+       if($compte->getSolde() > $transaction->getMontantenvoi() ){
+        $compte->setSolde($compte->getSolde() + $transaction->getMontantenvoi() + $commi2);
 
-      //var_dump($mo); die();
 
       $entityManager->persist($compte);
       $entityManager->flush();
-      return new Response('Le transfert a été effectué avec succés.Voici le code : '.$transaction->getCodeenvoi());
+      return new Response('Votre retrait cest déroulé avec succés. Orange vous remercie: ');
        }
        else{
            return new Response('Le solde de votre compte ne vous permet d effectuer une transaction');

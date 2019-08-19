@@ -76,7 +76,7 @@ public function systeme (Request $request, EntityManagerInterface $entityManager
     $file= $request->files->all()['imageFile'];
     $form->submit($data);
 
-    $utilisateur->setRoles(["ROLE_CAISSIER_SYSTEME"]);
+    $utilisateur->setRoles(["ROLE_CAISSIERSYSTEME"]);
     $utilisateur->setImageFile($file);
     $utilisateur->setPassword($passwordEncoder->encodePassword($utilisateur,
     $form->get('password')->getData()
@@ -170,7 +170,7 @@ public function addadmin(Request $request, EntityManagerInterface $entityManager
 
 /**
 * @Route("/api/depot", name="depot", methods={"POST"})
-* @Security("has_role('ROLE_CAISSIER_SYSTEME') ")
+* @Security("has_role('ROLE_CAISSIERSYSTEME') ")
 */
 public function argent(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder)
 {
