@@ -17,6 +17,8 @@ class TransactionType extends AbstractType
             ->add('telephoneenvoi')
             ->add('CNIenvoi')
             ->add('nomretrai')
+            ->add('telephoneretrai')
+            ->add('CNIretrai')
             ->add('montantenvoi')
             ->add('commissionEtat')
             ->add('commissionAdmin')

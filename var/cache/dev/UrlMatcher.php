@@ -15,7 +15,6 @@ return [
         '/_profiler/open' => [[['_route' => '_profiler_open_file', '_controller' => 'web_profiler.controller.profiler::openAction'], null, null, null, false, false, null]],
         '/authentification' => [[['_route' => 'authentification', '_controller' => 'App\\Controller\\AuthentificationController::index'], null, ['POST' => 0], null, false, false, null]],
         '/login' => [[['_route' => 'login', '_controller' => 'App\\Controller\\AuthentificationController::login'], null, ['POST' => 0], null, false, false, null]],
-        '/api/transaction' => [[['_route' => 'transaction', '_controller' => 'App\\Controller\\AuthentificationController::transaction'], null, ['POST' => 0], null, false, false, null]],
         '/usercompte' => [[['_route' => 'usercompte', '_controller' => 'App\\Controller\\PartenaireController::usercompte'], null, ['POST' => 0], null, false, false, null]],
         '/adduser' => [[['_route' => 'adduser', '_controller' => 'App\\Controller\\PartenaireController::adduser'], null, ['POST' => 0], null, false, false, null]],
         '/api/user' => [[['_route' => 'user', '_controller' => 'App\\Controller\\PartenaireController::user'], null, ['POST' => 0], null, false, false, null]],
@@ -26,6 +25,8 @@ return [
         '/admin' => [[['_route' => 'admin', '_controller' => 'App\\Controller\\ServiceController::admin'], null, ['POST' => 0], null, false, false, null]],
         '/adminuser' => [[['_route' => 'adminuser', '_controller' => 'App\\Controller\\ServiceController::addadmin'], null, ['POST' => 0], null, false, false, null]],
         '/api/depot' => [[['_route' => 'depot', '_controller' => 'App\\Controller\\ServiceController::argent'], null, ['POST' => 0], null, false, false, null]],
+        '/api/envoi' => [[['_route' => 'envoi', '_controller' => 'App\\Controller\\TransactionController::envoi'], null, ['POST' => 0], null, false, false, null]],
+        '/api/retrait' => [[['_route' => 'retrait', '_controller' => 'App\\Controller\\TransactionController::retrait'], null, ['POST' => 0], null, false, false, null]],
         '/api/login_check' => [[['_route' => 'api_login_check'], null, null, null, false, false, null]],
     ],
     [ // $regexpList

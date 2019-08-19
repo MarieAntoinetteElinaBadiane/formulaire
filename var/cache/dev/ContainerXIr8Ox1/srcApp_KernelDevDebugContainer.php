@@ -1,6 +1,6 @@
 <?php
 
-namespace ContainerEeaD7kQ;
+namespace ContainerXIr8Ox1;
 
 use Symfony\Component\DependencyInjection\Argument\RewindableGenerator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -65,6 +65,7 @@ class srcApp_KernelDevDebugContainer extends Container
             'App\\Controller\\AuthentificationController' => 'getAuthentificationControllerService.php',
             'App\\Controller\\PartenaireController' => 'getPartenaireControllerService.php',
             'App\\Controller\\ServiceController' => 'getServiceControllerService.php',
+            'App\\Controller\\TransactionController' => 'getTransactionControllerService.php',
             'Symfony\\Bundle\\FrameworkBundle\\Controller\\RedirectController' => 'getRedirectControllerService.php',
             'Symfony\\Bundle\\FrameworkBundle\\Controller\\TemplateController' => 'getTemplateControllerService.php',
             'Vich\\UploaderBundle\\Naming\\Base64Namer' => 'getBase64NamerService.php',
@@ -937,6 +938,9 @@ class srcApp_KernelDevDebugContainer extends Container
             return ($this->privates['data_collector.request'] ?? ($this->privates['data_collector.request'] = new \Symfony\Component\HttpKernel\DataCollector\RequestDataCollector()));
         }, 1 => 'onKernelResponse'], 0);
         $instance->addListener('kernel.request', [0 => function () {
+            return ($this->privates['debug.debug_handlers_listener'] ?? $this->getDebug_DebugHandlersListenerService());
+        }, 1 => 'configure'], 2048);
+        $instance->addListener('console.command', [0 => function () {
             return ($this->privates['debug.debug_handlers_listener'] ?? $this->getDebug_DebugHandlersListenerService());
         }, 1 => 'configure'], 2048);
         $instance->addListener('kernel.exception', [0 => function () {
