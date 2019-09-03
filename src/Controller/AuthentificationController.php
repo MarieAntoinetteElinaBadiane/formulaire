@@ -33,10 +33,11 @@ $user = new User();
 $user->setNom->codage($values->nom);
 $user->setPrenom->codage($values->prenom);
 $user->setStatut->codage($values->statut);
+$file=$request->files->all()['imageFile'];
 $user->setUsername->codage($values->username);
 $user->setPassword($passwordEncoder->encodePassword($user, $values->password));
-$user->setRoles(['ROLE_SUPER']);
-$user->setPhoto->codage($values->photo);
+$user->setRoles(['ROLE_SUPERADMIN']);
+$user->setImageFile($file);
 $entityManager = $this->getDoctrine()->getManager();
 $entityManager->persist($user);
 $entityManager->flush();
@@ -69,7 +70,6 @@ public function login(Request $request, JWTEncoderInterface $JWTEncoder, UserPas
         $data=$request->request->all();
          $form->submit($data);
          $utili=$this->getDoctrine()->getRepository(User::class)->findOneBy(['username'=> $data['username']]);
-        // var_dump($utili); die();
         $isValid = $passwordEncoder->isPasswordValid($utili,$data['password']);
         if (!$isValid) {
                 throw $this->createNotFoundException('User and Password Not Found');
@@ -78,6 +78,7 @@ public function login(Request $request, JWTEncoderInterface $JWTEncoder, UserPas
                         if ($utili->getStatut() == null || $utili->getStatut() == "actif") {
                                 $token = $JWTEncoder->encode([
                                         'username' => $user->getUsername(),
+                                        'roles' => $user->getRoles(),
                                         'exp' => time() + 3600 // 1 hour expiration
                                 ]);
                         

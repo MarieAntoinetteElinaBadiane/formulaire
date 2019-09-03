@@ -9,12 +9,14 @@ use App\Form\DepotType;
 use App\Form\CompteType;
 use App\Entity\Partenaire;
 use App\Form\PartenaireType;
+use App\Repository\PartenaireRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -60,6 +62,33 @@ class ServiceController extends FOSRestController
     
     }
 
+/**
+* @Route("/api/compte", name="compte", methods={"POST"})
+* @Security("has_role('ROLE_CAISSIER') ")
+*/
+public function compte (Request $request): Response
+{
+
+        $compte = new Compte();
+        $jour = date('d');
+        $mois = date('m');
+        $annee = date('Y');
+        $heure = date('H');
+        $minute = date('i');
+        $seconde= date('s');
+        $tata= date('ma');
+        $numerocompte=$jour.$mois.$annee.$heure.$minute.$seconde.$tata;
+        $compte->setNumerocompte($numerocompte);
+        $form = $this->createForm(CompteType::class, $compte);
+        $data=$request->request->all();
+        $form->submit($data);
+
+
+$entityManager = $this->getDoctrine()->getManager();
+$entityManager->persist($compte);
+$entityManager->flush();
+return new Response('Lajout sest bien passé',Response::HTTP_CREATED); 
+}
 
 
 
@@ -76,7 +105,7 @@ public function systeme (Request $request, EntityManagerInterface $entityManager
     $file= $request->files->all()['imageFile'];
     $form->submit($data);
 
-    $utilisateur->setRoles(["ROLE_CAISSIERSYSTEME"]);
+    $utilisateur->setRoles(["ROLE_CAISSIER"]);
     $utilisateur->setImageFile($file);
     $utilisateur->setPassword($passwordEncoder->encodePassword($utilisateur,
     $form->get('password')->getData()
@@ -97,13 +126,15 @@ public function systeme (Request $request, EntityManagerInterface $entityManager
         $tata= date('ma');
         $numerocompte=$jour.$mois.$annee.$heure.$minute.$seconde.$tata;
         $compte->setNumerocompte($numerocompte);
+        $compte->setSolde(0);
+        $utilisateur->setCompte($compte);
         $form = $this->createForm(CompteType::class, $compte);
         $data=$request->request->all();
         $form->submit($data);
 
 
 $entityManager = $this->getDoctrine()->getManager();
-$compte->setUserCompte($utilisateur);
+//$compte->setUserCompte($utilisateur);
 $entityManager->persist($compte);
 $entityManager->flush();
 return new Response('Le deux tables ont été ajouté',Response::HTTP_CREATED); 
@@ -120,11 +151,13 @@ public function admin(Request $request, EntityManagerInterface $entityManager, U
     $form=$this->createForm(UserType::class , $utilisateur);
     $form->handleRequest($request);
     $data=$request->request->all();
+    $file= $request->files->all()['imageFile'];
+
 
           $form->submit($data);
 
-    $utilisateur->setRoles(["ROLE_SuperAdmin"]);
-
+    $utilisateur->setRoles(["ROLE_SUPERADMIN"]);
+    $utilisateur->setImageFile($file);
     $utilisateur->setPassword($passwordEncoder->encodePassword($utilisateur,
     $form->get('password')->getData()
         )
@@ -146,6 +179,7 @@ public function addadmin(Request $request, EntityManagerInterface $entityManager
                 $part= new Partenaire();
                 $form = $this->createForm(PartenaireType::class, $part);
                 $data=$request->request->all();
+                $file= $request->files->all()['imageFile'];
                 $form->submit($data);
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($part);
@@ -157,6 +191,7 @@ public function addadmin(Request $request, EntityManagerInterface $entityManager
     $data=$request->request->all();
     $form->submit($data);
      $utilisateur->setRoles(['ROLE_ADMIN']);
+     $utilisateur->setImageFile($file);
     $utilisateur->setPassword($passwordEncoder->encodePassword($utilisateur,
     $form->get('password')->getData()
         )
@@ -169,16 +204,28 @@ public function addadmin(Request $request, EntityManagerInterface $entityManager
 }
 
 /**
+* @Route("/api/listerpartenaire", name="listerpartenaire", methods={"GET"})
+* @Security("has_role('ROLE_ADMIN') ")
+*/
+
+public function partenaire(PartenaireRepository $partenaireRepository, SerializerInterface $serializer)
+    { 
+         //$connecte = $this->getPartenaire();
+       $part=$partenaireRepository->findAll();
+       $data=$serializer->serialize($part, 'json');
+
+       
+       return new Response($data, 200, [
+           'content_Type' => 'application/json'
+       ]);
+    }
+
+/**
 * @Route("/api/depot", name="depot", methods={"POST"})
-* @Security("has_role('ROLE_CAISSIERSYSTEME') ")
+* @Security("has_role('ROLE_CAISSIER') ")
 */
 public function argent(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder)
 {
-
-    $values = json_decode($request->getContent());
-    if ($values->montant >= 75000){
-        
-
             $depot = new Depot();
             $depot->setDate(new \DateTime);
             $connecte=$this->getUser();
@@ -186,23 +233,19 @@ public function argent(Request $request, EntityManagerInterface $entityManager, 
             $depot->setUser($user);
             $form = $this->createForm(DepotType::class, $depot);
             $data=$request->request->all();
-            
             $form->submit($data);
+            if ($depot->getMontant() >= 75000){
+           
 
-           $compte = new Compte();
         
-             $compte = $this->getDoctrine()->getRepository(Compte::class)->
-             findOneBy(["numerocompte"=>$values->numerocompte]);
-
-        $compte->setSolde($compte->getSolde()+ $values->montant);
-        //$depot->setCompte($compte);
+        $compte = $this->getDoctrine()->getRepository(Compte::class)->findOneBy(["numerocompte"=>$data]);
+        $compte->setSolde($compte->getSolde()+$depot->getMontant());
         $form = $this->createForm(CompteType::class, $compte);
         $data=$request->request->all();
         $form->submit($data);
     }
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($depot);
-        $entityManager->persist($compte);
         $entityManager->flush();
     return new Response('Le depot sur votre compte sest bien passé',Response::HTTP_CREATED); 
     }

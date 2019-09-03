@@ -10,12 +10,14 @@ use App\Form\DepotType;
 use App\Form\CompteType;
 use App\Entity\Partenaire;
 use App\Form\PartenaireType;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,6 +25,28 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class PartenaireController extends FOSRestController
 {
+    
+/**
+* @Route("/api/listeruser", name="listeruser", methods={"GET"})
+* @Security("has_role('ROLE_ADMIN') ")
+*/
+
+public function index(UserRepository $userRepository, SerializerInterface $serializer)
+    {  $connecte = $this->getUser();
+       $part=$userRepository->findBy(['partenaire'=>$connecte->getPartenaire()]);
+       $data=$serializer->serialize($part, 'json');
+
+       
+       return new Response($data, 200, [
+           'content_Type' => 'application/json'
+       ]);
+    }
+
+
+  
+  
+  
+
 /**
 * @Route("/usercompte", name="usercompte", methods={"POST"})
 */
@@ -44,7 +68,7 @@ public function usercompte (Request $request, EntityManagerInterface $entityMana
     $file= $request->files->all()['imageFile'];
     $form->submit($data);
 
-    $utilisateur->setRoles(["ROLE_CAISSIERPARTENAIRE"]);
+    $utilisateur->setRoles(["ROLE_CAISSIER"]);
     $utilisateur->setImageFile($file);
     $utilisateur->setPassword($passwordEncoder->encodePassword($utilisateur,
     $form->get('password')->getData()
@@ -117,7 +141,7 @@ public function adduser(Request $request, EntityManagerInterface $entityManager,
 
 /**
 * @Route("/api/user", name="user", methods={"POST"})
-*@IsGranted("ROLE_ADMIN")
+*@Security("has_role('ROLE_ADMIN') ")
 */
 public function user(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder): Response
 {
@@ -241,7 +265,7 @@ return new Response('On a bien ajouté un utilisateur',Response::HTTP_CREATED);
 
 /**
 * @Route("/api/depot", name="depot", methods={"POST"})
-* @IsGranted("ROLE_CAISSIERPARTENAIRE")
+* @Security("has_role('ROLE_CAISSIER') ")
 */
     public function argent(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder)
     {
