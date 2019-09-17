@@ -318,6 +318,6 @@ class __TwigTemplate_76b8a7dfa045d36ad3ccd3de49fb072b585586ef58778a9e707853576dd
 .timeline-graph .{{ classnames['controller.argument_value_resolver']|raw }} .timeline-period {
     fill: var(--color-controller-argument-value-resolver);
 }
-", "@WebProfiler/Collector/time.css.twig", "/home/elina/derniér/nickel/vendor/symfony/web-profiler-bundle/Resources/views/Collector/time.css.twig");
+", "@WebProfiler/Collector/time.css.twig", "/home/elina/Documents/Mon projet WARI/formulaire/vendor/symfony/web-profiler-bundle/Resources/views/Collector/time.css.twig");
     }
 }

@@ -108,6 +108,6 @@ class __TwigTemplate_1266e48e5bf83c2d7db64d26533233a3926823c5b94b0136d69a39f972f
     </exception>
 {% endfor %}
 </error>
-", "@Twig/Exception/exception.xml.twig", "/home/elina/derniér/nickel/vendor/symfony/twig-bundle/Resources/views/Exception/exception.xml.twig");
+", "@Twig/Exception/exception.xml.twig", "/home/elina/Documents/Mon projet WARI/formulaire/vendor/symfony/twig-bundle/Resources/views/Exception/exception.xml.twig");
     }
 }

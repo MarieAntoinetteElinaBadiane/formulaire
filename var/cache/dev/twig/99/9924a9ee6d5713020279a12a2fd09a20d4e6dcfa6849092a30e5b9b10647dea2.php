@@ -162,6 +162,6 @@ class __TwigTemplate_b22fa86c8fad225751188371e7a99d93538d127fbd77d5d449ce15aa282
 
     {{ include('@WebProfiler/Profiler/toolbar_item.html.twig', { link: false }) }}
 {% endblock %}
-", "@WebProfiler/Collector/ajax.html.twig", "/home/elina/derniér/nickel/vendor/symfony/web-profiler-bundle/Resources/views/Collector/ajax.html.twig");
+", "@WebProfiler/Collector/ajax.html.twig", "/home/elina/Documents/Mon projet WARI/formulaire/vendor/symfony/web-profiler-bundle/Resources/views/Collector/ajax.html.twig");
     }
 }

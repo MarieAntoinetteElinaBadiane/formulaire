@@ -885,6 +885,6 @@ class SvgRenderer {
         return element;
     }
 }
-", "@WebProfiler/Collector/time.js", "/home/elina/derniér/nickel/vendor/symfony/web-profiler-bundle/Resources/views/Collector/time.js");
+", "@WebProfiler/Collector/time.js", "/home/elina/Documents/Mon projet WARI/formulaire/vendor/symfony/web-profiler-bundle/Resources/views/Collector/time.js");
     }
 }

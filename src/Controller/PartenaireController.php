@@ -11,6 +11,9 @@ use App\Form\CompteType;
 use App\Entity\Partenaire;
 use App\Form\PartenaireType;
 use App\Repository\UserRepository;
+use App\Repository\DepotRepository;
+use App\Repository\CompteRepository;
+use App\Repository\PartenaireRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,18 +28,20 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class PartenaireController extends FOSRestController
 {
-    
+
+
 /**
 * @Route("/api/listeruser", name="listeruser", methods={"GET"})
-* @Security("has_role('ROLE_ADMIN') ")
+* @Security("has_role('ROLE_Admin') ")
 */
 
 public function index(UserRepository $userRepository, SerializerInterface $serializer)
-    {  $connecte = $this->getUser();
+    {  
+        
+        $connecte = $this->getUser();
        $part=$userRepository->findBy(['partenaire'=>$connecte->getPartenaire()]);
-       $data=$serializer->serialize($part, 'json');
 
-       
+       $data=$serializer->serialize($part, 'json');
        return new Response($data, 200, [
            'content_Type' => 'application/json'
        ]);
@@ -44,7 +49,8 @@ public function index(UserRepository $userRepository, SerializerInterface $seria
 
 
   
-  
+
+
   
 
 /**
@@ -68,7 +74,7 @@ public function usercompte (Request $request, EntityManagerInterface $entityMana
     $file= $request->files->all()['imageFile'];
     $form->submit($data);
 
-    $utilisateur->setRoles(["ROLE_CAISSIER"]);
+    $utilisateur->setRoles(["ROLE_Caissier"]);
     $utilisateur->setImageFile($file);
     $utilisateur->setPassword($passwordEncoder->encodePassword($utilisateur,
     $form->get('password')->getData()
@@ -126,7 +132,7 @@ public function adduser(Request $request, EntityManagerInterface $entityManager,
     $file= $request->files->all()['imageFile'];
     $form->submit($data);
 
-    $utilisateur->setRoles(["ROLE_ADMIN"]);
+    $utilisateur->setRoles(["ROLE_Admin"]);
     $utilisateur->setImageFile($file);
     $utilisateur->setPassword($passwordEncoder->encodePassword($utilisateur,
     $form->get('password')->getData()
@@ -141,7 +147,7 @@ public function adduser(Request $request, EntityManagerInterface $entityManager,
 
 /**
 * @Route("/api/user", name="user", methods={"POST"})
-*@Security("has_role('ROLE_ADMIN') ")
+*@Security("has_role('ROLE_Admin') ")
 */
 public function user(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder): Response
 {
@@ -154,7 +160,7 @@ public function user(Request $request, EntityManagerInterface $entityManager, Us
     $file= $request->files->all()['imageFile'];
     $form->submit($data);
 
-    $utilisateur->setRoles(["ROLE_USER"]);
+    $utilisateur->setRoles(["ROLE_User"]);
     $utilisateur->setImageFile($file);
     $utilisateur->setPassword($passwordEncoder->encodePassword($utilisateur,
     $form->get('password')->getData()
@@ -191,7 +197,7 @@ public function usersysteme (Request $request, EntityManagerInterface $entityMan
     $file= $request->files->all()['imageFile'];
     $form->submit($data);
 
-    $utilisateur->setRoles(["ROLE_USER"]);
+    $utilisateur->setRoles(["ROLE_Caissier"]);
     $utilisateur->setImageFile($file);
     $utilisateur->setPassword($passwordEncoder->encodePassword($utilisateur,
     $form->get('password')->getData()
@@ -249,7 +255,7 @@ public function ajout(Request $request, EntityManagerInterface $entityManager, U
     $file= $request->files->all()['imageFile'];
     $form->submit($data);
 
-    $utilisateur->setRoles(["ROLE_USER"]);
+    $utilisateur->setRoles(["ROLE_User"]);
     $utilisateur->setImageFile($file);
     $utilisateur->setPassword($passwordEncoder->encodePassword($utilisateur,
     $form->get('password')->getData()
@@ -265,7 +271,7 @@ return new Response('On a bien ajouté un utilisateur',Response::HTTP_CREATED);
 
 /**
 * @Route("/api/depot", name="depot", methods={"POST"})
-* @Security("has_role('ROLE_CAISSIER') ")
+* @Security("has_role('ROLE_Caissier') ")
 */
     public function argent(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder)
     {
@@ -301,4 +307,18 @@ return new Response('On a bien ajouté un utilisateur',Response::HTTP_CREATED);
             $entityManager->flush();
         return new Response('Le depot sur votre compte sest bien passé',Response::HTTP_CREATED); 
         }
+/**
+* @Route("/api/faire", name="faire", methods={"GET", "POST"})
+*@Security("has_role('ROLE_Caissier')")
+*/
+    public function Faire (DepotRepository $depotRepository, SerializerInterface $serializer)
+    {
+        $dep = $depotRepository->findAll();
+        $depo = $serializer->serialize($dep, 'json', ['groups' => ['depot']]);
+        return new Response($depo, 200, [
+            'Content-Type' => 'application/json'
+        ]);
+    }
+
+
 }

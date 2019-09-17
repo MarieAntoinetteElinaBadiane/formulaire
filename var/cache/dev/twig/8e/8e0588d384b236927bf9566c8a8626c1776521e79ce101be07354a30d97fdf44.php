@@ -97,6 +97,6 @@ class __TwigTemplate_f9a0920489f85c64c889c1e9c63752470bbebfbd344469a741489afedad
     <?php endif ?>
     <?php echo \$view['form']->block(\$form, 'choice_widget_options', ['choices' => \$choices]) ?>
 </select>
-", "@Framework/Form/choice_widget_collapsed.html.php", "/home/elina/derniér/nickel/vendor/symfony/framework-bundle/Resources/views/Form/choice_widget_collapsed.html.php");
+", "@Framework/Form/choice_widget_collapsed.html.php", "/home/elina/Documents/Mon projet WARI/formulaire/vendor/symfony/framework-bundle/Resources/views/Form/choice_widget_collapsed.html.php");
     }
 }

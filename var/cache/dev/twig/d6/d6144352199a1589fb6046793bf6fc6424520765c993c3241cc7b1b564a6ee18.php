@@ -161,6 +161,6 @@ class __TwigTemplate_a46e84f4b6855099eb1fe390b8d5ac6c648023879972c68915eeab0ad11
         </tr>
     </tbody>
 </table>
-", "@Twig/Exception/traces_text.html.twig", "/home/elina/derniér/nickel/vendor/symfony/twig-bundle/Resources/views/Exception/traces_text.html.twig");
+", "@Twig/Exception/traces_text.html.twig", "/home/elina/Documents/Mon projet WARI/formulaire/vendor/symfony/twig-bundle/Resources/views/Exception/traces_text.html.twig");
     }
 }

@@ -1828,6 +1828,6 @@ class __TwigTemplate_e3e5aa3de979f37447044318090c10b64e26d1aa48306c99b142671e426
         </tbody>
     </table>
 {% endmacro %}
-", "@Doctrine/Collector/db.html.twig", "/home/elina/derniér/nickel/vendor/doctrine/doctrine-bundle/Resources/views/Collector/db.html.twig");
+", "@Doctrine/Collector/db.html.twig", "/home/elina/Documents/Mon projet WARI/formulaire/vendor/doctrine/doctrine-bundle/Resources/views/Collector/db.html.twig");
     }
 }

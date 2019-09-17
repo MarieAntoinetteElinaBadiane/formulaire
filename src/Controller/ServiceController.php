@@ -9,6 +9,7 @@ use App\Form\DepotType;
 use App\Form\CompteType;
 use App\Entity\Partenaire;
 use App\Form\PartenaireType;
+use App\Repository\CompteRepository;
 use App\Repository\PartenaireRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -64,11 +65,16 @@ class ServiceController extends FOSRestController
 
 /**
 * @Route("/api/compte", name="compte", methods={"POST"})
-* @Security("has_role('ROLE_CAISSIER') ")
+* @Security("has_role('ROLE_Caissier') ")
 */
 public function compte (Request $request): Response
 {
 
+  $values=$request->request->all();
+  $part = $this->getDoctrine()->getRepository(Partenaire::class)->findOneBy(["ninea"=>$values]);
+  $ya=$part->getId();
+  $ya1 = $this->getDoctrine()->getRepository(Partenaire::class)->find($ya);
+  
         $compte = new Compte();
         $jour = date('d');
         $mois = date('m');
@@ -79,9 +85,9 @@ public function compte (Request $request): Response
         $tata= date('ma');
         $numerocompte=$jour.$mois.$annee.$heure.$minute.$seconde.$tata;
         $compte->setNumerocompte($numerocompte);
-        $form = $this->createForm(CompteType::class, $compte);
-        $data=$request->request->all();
-        $form->submit($data);
+        $compte->setSolde(0);
+        $compte->setPartenaire($ya1);
+
 
 
 $entityManager = $this->getDoctrine()->getManager();
@@ -90,7 +96,18 @@ $entityManager->flush();
 return new Response('Lajout sest bien passé',Response::HTTP_CREATED); 
 }
 
-
+/**
+* @Route("/api/compt", name="compt", methods={"GET", "POST"})
+*@Security("has_role('ROLE_Caissier')")
+*/
+public function compt (CompteRepository $compteRepository, SerializerInterface $serializer)
+{
+    $com = $compteRepository->findAll();
+    $compt = $serializer->serialize($com, 'json', ['groups' => ['compte']]);
+    return new Response($compt, 200, [
+        'Content-Type' => 'application/json'
+    ]);
+}
 
 /**
 * @Route("/systeme", name="systeme", methods={"POST"})
@@ -105,7 +122,7 @@ public function systeme (Request $request, EntityManagerInterface $entityManager
     $file= $request->files->all()['imageFile'];
     $form->submit($data);
 
-    $utilisateur->setRoles(["ROLE_CAISSIER"]);
+    $utilisateur->setRoles(["ROLE_Caissier"]);
     $utilisateur->setImageFile($file);
     $utilisateur->setPassword($passwordEncoder->encodePassword($utilisateur,
     $form->get('password')->getData()
@@ -156,7 +173,7 @@ public function admin(Request $request, EntityManagerInterface $entityManager, U
 
           $form->submit($data);
 
-    $utilisateur->setRoles(["ROLE_SUPERADMIN"]);
+    $utilisateur->setRoles(["ROLE_SuperAdmin"]);
     $utilisateur->setImageFile($file);
     $utilisateur->setPassword($passwordEncoder->encodePassword($utilisateur,
     $form->get('password')->getData()
@@ -190,7 +207,7 @@ public function addadmin(Request $request, EntityManagerInterface $entityManager
     $form->handleRequest($request);
     $data=$request->request->all();
     $form->submit($data);
-     $utilisateur->setRoles(['ROLE_ADMIN']);
+     $utilisateur->setRoles(['ROLE_Admin']);
      $utilisateur->setImageFile($file);
     $utilisateur->setPassword($passwordEncoder->encodePassword($utilisateur,
     $form->get('password')->getData()
@@ -203,26 +220,10 @@ public function addadmin(Request $request, EntityManagerInterface $entityManager
     return new Response('Le partenaire a bien ajouté admin du user',Response::HTTP_CREATED); 
 }
 
-/**
-* @Route("/api/listerpartenaire", name="listerpartenaire", methods={"GET"})
-* @Security("has_role('ROLE_ADMIN') ")
-*/
-
-public function partenaire(PartenaireRepository $partenaireRepository, SerializerInterface $serializer)
-    { 
-         //$connecte = $this->getPartenaire();
-       $part=$partenaireRepository->findAll();
-       $data=$serializer->serialize($part, 'json');
-
-       
-       return new Response($data, 200, [
-           'content_Type' => 'application/json'
-       ]);
-    }
 
 /**
 * @Route("/api/depot", name="depot", methods={"POST"})
-* @Security("has_role('ROLE_CAISSIER') ")
+* @Security("has_role('ROLE_Caissier') ")
 */
 public function argent(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder)
 {
@@ -248,5 +249,20 @@ public function argent(Request $request, EntityManagerInterface $entityManager, 
         $entityManager->persist($depot);
         $entityManager->flush();
     return new Response('Le depot sur votre compte sest bien passé',Response::HTTP_CREATED); 
+    }
+
+
+
+/**
+* @Route("/api/partenaire", name="partenaire", methods={"GET", "POST"})
+* @Security("has_role('ROLE_Admin') ")
+*/
+    public function ListerPartenaire(PartenaireRepository $partenaireRepository, SerializerInterface $serializer)
+    {
+        $par = $partenaireRepository->findAll();
+        $parte = $serializer->serialize($par, 'json', ['groups' => ['partenaire']]);
+        return new Response($parte, 200, [
+            'Content-Type' => 'application/json'
+        ]);
     }
 }

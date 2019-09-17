@@ -171,6 +171,6 @@ class __TwigTemplate_524b9fbd0d415a5f59ca9a2fceeed2d05982e92cade99d081098bd267ce
         {%- endfor -%}
     </pre>
 {% endif %}
-", "@Doctrine/Collector/explain.html.twig", "/home/elina/derniér/nickel/vendor/doctrine/doctrine-bundle/Resources/views/Collector/explain.html.twig");
+", "@Doctrine/Collector/explain.html.twig", "/home/elina/Documents/Mon projet WARI/formulaire/vendor/doctrine/doctrine-bundle/Resources/views/Collector/explain.html.twig");
     }
 }

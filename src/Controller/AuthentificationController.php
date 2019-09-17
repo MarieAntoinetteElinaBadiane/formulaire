@@ -18,6 +18,18 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AuthentificationController extends AbstractController
 {
+
+/**
+ * @Route("/bloquer", name="bloquer", methods={"POST"})
+ */
+public function bloquer(Request $request, EntityManagerInterface $entityManager){
+        $data=$request->request->all();
+         $vava=$this->getDoctrine()->getRepository(User::class)->findOneBy(['username'=> $data['username']]);
+         $vava->setStatut("bloquer");
+         $entityManager->flush();
+}
+
+
 /**
 * @Route("/authentification", name="authentification", methods={"POST"})
 */
@@ -36,7 +48,7 @@ $user->setStatut->codage($values->statut);
 $file=$request->files->all()['imageFile'];
 $user->setUsername->codage($values->username);
 $user->setPassword($passwordEncoder->encodePassword($user, $values->password));
-$user->setRoles(['ROLE_SUPERADMIN']);
+$user->setRoles(['ROLE_SuperAdmin']);
 $user->setImageFile($file);
 $entityManager = $this->getDoctrine()->getManager();
 $entityManager->persist($user);
@@ -56,7 +68,7 @@ return new JsonResponse($data, 500);
 }
 
 /**
-* @Route("/login", name="login", methods={"POST"})
+* @Route("/api/login_check", name="login_check", methods={"POST"})
 * @param Request $request
 * @param JWTEncoderInterface $JWTEncoder
 * @return JsonResponse
@@ -71,6 +83,7 @@ public function login(Request $request, JWTEncoderInterface $JWTEncoder, UserPas
          $form->submit($data);
          $utili=$this->getDoctrine()->getRepository(User::class)->findOneBy(['username'=> $data['username']]);
         $isValid = $passwordEncoder->isPasswordValid($utili,$data['password']);
+     
         if (!$isValid) {
                 throw $this->createNotFoundException('User and Password Not Found');
                 }
@@ -85,12 +98,16 @@ public function login(Request $request, JWTEncoderInterface $JWTEncoder, UserPas
                                 return new JsonResponse(['token' => $token]);
                 
         }
-        elseif($utili->getStatut() == "bloqué") {
-                throw $this->createNotFoundException('User and Password Not Found');
+        elseif($utili->getStatut() == "bloquer") {
+                return $this->json(
+                        [
+                                'Message'=>'Vous Etes Bloquer'
+
+                        ]
+                );
         }
                 }
-      //  $utili->getStatut();        
-                // var_dump($utili->getStatut()); die();
+      
 
          
 }

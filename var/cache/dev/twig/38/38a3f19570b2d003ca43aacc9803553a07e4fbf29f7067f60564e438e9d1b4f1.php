@@ -2080,6 +2080,6 @@ class __TwigTemplate_77ee6c570ade9f9ee79c29d308ab74f4c8b45331e5e0c5099293cb3b2f3
         {{ tree.form_tree_details(childName, childData, forms_by_hash) }}
     {% endfor %}
 {% endmacro %}
-", "@WebProfiler/Collector/form.html.twig", "/home/elina/derniér/nickel/vendor/symfony/web-profiler-bundle/Resources/views/Collector/form.html.twig");
+", "@WebProfiler/Collector/form.html.twig", "/home/elina/Documents/Mon projet WARI/formulaire/vendor/symfony/web-profiler-bundle/Resources/views/Collector/form.html.twig");
     }
 }

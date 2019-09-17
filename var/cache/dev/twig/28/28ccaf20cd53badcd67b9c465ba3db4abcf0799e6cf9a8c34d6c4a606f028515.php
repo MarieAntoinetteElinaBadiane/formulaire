@@ -71,6 +71,6 @@ class __TwigTemplate_e661d8731291cb5e0ba02aa9afc95d96944a8f6bcb78ed7b810bcb7d9df
         <?php echo \$view['form']->widget(\$form); ?>
     </td>
 </tr>
-", "@Framework/FormTable/hidden_row.html.php", "/home/elina/derniér/nickel/vendor/symfony/framework-bundle/Resources/views/FormTable/hidden_row.html.php");
+", "@Framework/FormTable/hidden_row.html.php", "/home/elina/Documents/Mon projet WARI/formulaire/vendor/symfony/framework-bundle/Resources/views/FormTable/hidden_row.html.php");
     }
 }

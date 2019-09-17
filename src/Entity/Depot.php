@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource()
@@ -15,21 +16,25 @@ class Depot
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"depot"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="date")
+     *  @Groups({"depot"})
      */
     private $date;
 
     /**
      * @ORM\Column(type="integer")
+     *  @Groups({"depot"})
      */
     private $montant;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="depot")
+     * @Groups({"depot"})
      */
     private $user;
 

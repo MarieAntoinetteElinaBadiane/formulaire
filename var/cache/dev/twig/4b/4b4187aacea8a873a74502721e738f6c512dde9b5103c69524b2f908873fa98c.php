@@ -79,6 +79,6 @@ class __TwigTemplate_401357c23db80a76e59fd58d362d27364aae77bb8f3a0fbf5708c09e766
 {{ status_code }} {{ status_text }}
 
 */
-", "@Twig/Exception/error.js.twig", "/home/elina/derniér/nickel/vendor/symfony/twig-bundle/Resources/views/Exception/error.js.twig");
+", "@Twig/Exception/error.js.twig", "/home/elina/Documents/Mon projet WARI/formulaire/vendor/symfony/twig-bundle/Resources/views/Exception/error.js.twig");
     }
 }

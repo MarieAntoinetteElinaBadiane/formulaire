@@ -268,6 +268,6 @@ class __TwigTemplate_2620f97ef767166db3de6a791d57c2f52f1b638b845a17baec02f39ae5e
     {%- set label = label|trans|default(label) -%}
     {{- block('form_label') -}}
 {%- endblock -%}
-", "@VichUploader/Form/fields.html.twig", "/home/elina/derniér/nickel/vendor/vich/uploader-bundle/Resources/views/Form/fields.html.twig");
+", "@VichUploader/Form/fields.html.twig", "/home/elina/Documents/Mon projet WARI/formulaire/vendor/vich/uploader-bundle/Resources/views/Form/fields.html.twig");
     }
 }

@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource()
@@ -15,48 +16,57 @@ class Transaction
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"transaction"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"transaction"})
      */
     private $nomenvoi;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"transaction"})
      */
     private $prenomenvoi;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"transaction"})
      */
     private $telephoneenvoi;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"transaction"})
      */
     private $CNIenvoi;
 
     /**
      * @ORM\Column(type="date")
+     * @Groups({"transaction"})
      */
     private $dateenvoi;
 
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"transaction"})
      */
     private $nomretrai;
 
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"transaction"})
      */
     private $codeenvoi;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"transaction"})
      */
     private $montantenvoi;
 
@@ -69,11 +79,6 @@ class Transaction
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="usertrans")
      */
     private $user;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $statut;
 
     /**
      * @ORM\Column(type="integer")
@@ -92,18 +97,27 @@ class Transaction
 
     /**
      * @ORM\Column(type="date", nullable=true)
+     * @Groups({"transaction"})
      */
     private $dateretrai;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"transaction"})
      */
     private $telephoneretrai;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"transaction"})
      */
     private $CNIretrai;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"transaction"})
+     */
+    private $statut;
 
     public function getId(): ?int
     {
@@ -230,17 +244,7 @@ class Transaction
         return $this;
     }
 
-    public function getStatut(): ?string
-    {
-        return $this->statut;
-    }
-
-    public function setStatut(string $statut): self
-    {
-        $this->statut = $statut;
-
-        return $this;
-    }
+   
 
     public function getCommissionAdmin(): ?int
     {
@@ -310,6 +314,18 @@ class Transaction
     public function setCNIretrai(?int $CNIretrai): self
     {
         $this->CNIretrai = $CNIretrai;
+
+        return $this;
+    }
+
+    public function getStatut(): ?string
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(?string $statut): self
+    {
+        $this->statut = $statut;
 
         return $this;
     }

@@ -104,6 +104,6 @@ class __TwigTemplate_85fe4d7902fcf8520848d319fbd4212fe3f017eb7533ed737dc520bc5c6
   {{ include('@Twig/Exception/trace.txt.twig', { trace: trace }, with_context = false) }}
 {% endfor %}
 {% endif %}
-", "@Twig/Exception/traces.txt.twig", "/home/elina/derniér/nickel/vendor/symfony/twig-bundle/Resources/views/Exception/traces.txt.twig");
+", "@Twig/Exception/traces.txt.twig", "/home/elina/Documents/Mon projet WARI/formulaire/vendor/symfony/twig-bundle/Resources/views/Exception/traces.txt.twig");
     }
 }

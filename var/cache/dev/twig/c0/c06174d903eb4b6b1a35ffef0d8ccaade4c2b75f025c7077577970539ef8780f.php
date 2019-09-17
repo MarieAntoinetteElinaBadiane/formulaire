@@ -154,6 +154,6 @@ class __TwigTemplate_6e5347e26214c071b80a07b4dbf56adbb0b5503b5bd2713f9764dd212e6
     </ul>
 </div>
 {% endblock %}
-", "authentification/index.html.twig", "/home/elina/formulaire/templates/authentification/index.html.twig");
+", "authentification/index.html.twig", "/home/elina/Documents/Mon projet WARI/formulaire/templates/authentification/index.html.twig");
     }
 }
