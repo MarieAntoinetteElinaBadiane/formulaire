@@ -14,6 +14,6 @@ include_once $this->targetDirs[3].'/vendor/symfony/security-http/Session/Session
 
 $this->privates['security.authentication.listener.basic.api'] = $instance = new \Symfony\Component\Security\Http\Firewall\BasicAuthenticationListener(($this->services['security.token_storage'] ?? ($this->services['security.token_storage'] = new \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage())), ($this->privates['security.authentication.manager'] ?? $this->getSecurity_Authentication_ManagerService()), 'api', ($this->privates['lexik_jwt_authentication.security.guard.jwt_token_authenticator'] ?? $this->load('getLexikJwtAuthentication_Security_Guard_JwtTokenAuthenticatorService.php')), ($this->privates['logger'] ?? ($this->privates['logger'] = new \Symfony\Component\HttpKernel\Log\Logger())));
 
-$instance->setSessionAuthenticationStrategy(new \Symfony\Component\Security\Http\Session\SessionAuthenticationStrategy('none'));
+$instance->setSessionAuthenticationStrategy(($this->privates['security.authentication.session_strategy_noop'] ?? ($this->privates['security.authentication.session_strategy_noop'] = new \Symfony\Component\Security\Http\Session\SessionAuthenticationStrategy('none'))));
 
 return $instance;

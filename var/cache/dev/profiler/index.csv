@@ -982,3 +982,4 @@ c269e4,127.0.0.1,GET,http://localhost:8000/api/faire,1568636134,,200
 701ea2,127.0.0.1,GET,http://localhost:8000/api/compt,1568636141,,200
 7cd2bf,127.0.0.1,OPTIONS,http://localhost:8000/api/transaction,1568636148,,200
 36f8e0,127.0.0.1,GET,http://localhost:8000/api/transaction,1568636149,,200
+054686,127.0.0.1,POST,http://localhost:8000/ajoutdestrois,1568765021,,201
